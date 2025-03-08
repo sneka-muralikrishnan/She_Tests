@@ -102,54 +102,110 @@
 
     <script>
         if (!localStorage.getItem("loggedIn")) {
-            window.location.href = "login.html";
-        }
-
-        function showSection(section) {
-            document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
-            document.getElementById(section).style.display = "block";
-        }
+            window.location.href = "login.html";}
         
-        function logSymptoms() {
-            let mood = document.getElementById("mood").value;
-            let symptoms = [];
-            
-            ["cramps", "headache", "fatigue", "bloating"].forEach(symptom => {
-                if (document.getElementById(symptom).checked) {
-                    symptoms.push(symptom);
-                }
-            });
 
-            let log = {
-                date: new Date().toDateString(),
-                mood: mood,
-                symptoms: symptoms.join(", ") || "None"
-            };
+    function showSection(section) {
+        document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
+        document.getElementById(section).style.display = "block";
+    }
 
-            let logs = JSON.parse(localStorage.getItem("symptomLogs")) || [];
-            logs.push(log);
-            localStorage.setItem("symptomLogs", JSON.stringify(logs));
-            updateSymptomHistory();
-        }
+    function predictPeriod() {
+    let lastPeriodDate = document.getElementById("lastPeriod").value;
+    let cycleLength = document.getElementById("cycleLength").value;
 
-        function updateSymptomHistory() {
-            let logs = JSON.parse(localStorage.getItem("symptomLogs")) || [];
-            let historyList = document.getElementById("symptomHistory");
-            historyList.innerHTML = "";
-            logs.forEach(log => {
-                let li = document.createElement("li");
-                li.innerText = `${log.date} - Mood: ${log.mood}, Symptoms: ${log.symptoms}`;
-                historyList.appendChild(li);
-            });
-        }
+    if (!lastPeriodDate || !cycleLength.trim()) {
+        document.getElementById("predictionResult").innerText = "Please enter both Last Period Date and Cycle Length.";
+        return;
+    }
+    
+    cycleLength = parseInt(cycleLength);
+    if (isNaN(cycleLength) || cycleLength < 21 || cycleLength > 35) {
+        document.getElementById("predictionResult").innerText = "Cycle length must be between 21 and 35 days.";
+        return;
+    }
 
-        function clearSymptomHistory() {
-            localStorage.removeItem("symptomLogs");
-            updateSymptomHistory();
-        }
+    let lastPeriod = new Date(lastPeriodDate);
+    let nextPeriod = new Date(lastPeriod);
+    nextPeriod.setDate(lastPeriod.getDate() + cycleLength);
 
+    let predictionText = `📅 Next period is expected on: ${nextPeriod.toDateString()}`;
+    document.getElementById("predictionResult").innerText = predictionText;
+
+    // ✅ Store prediction in history
+    let history = JSON.parse(localStorage.getItem("periodHistory")) || [];
+    history.push({ lastPeriod: lastPeriod.toDateString(), nextPeriod: nextPeriod.toDateString() });
+    localStorage.setItem("periodHistory", JSON.stringify(history));
+
+    updateCycleHistory();
+}
+
+
+    function updateCycleHistory() {
+        let history = JSON.parse(localStorage.getItem("periodHistory")) || [];
+        let historyList = document.getElementById("historyList");
+        historyList.innerHTML = "";
+
+        history.forEach(entry => {
+            let li = document.createElement("li");
+            li.innerText = `Last Period: ${entry.lastPeriod} → Predicted Next: ${entry.nextPeriod}`;
+            historyList.appendChild(li);
+        });
+    }
+
+    function clearHistory() {
+        localStorage.removeItem("periodHistory");
+        updateCycleHistory();
+    }
+
+    function logSymptoms() {
+        let mood = document.getElementById("mood").value;
+        let symptoms = [];
+
+        ["cramps", "headache", "fatigue", "bloating"].forEach(symptom => {
+            if (document.getElementById(symptom).checked) {
+                symptoms.push(symptom);
+            }
+        });
+
+        let log = {
+            date: new Date().toDateString(),
+            mood: mood,
+            symptoms: symptoms.join(", ") || "None"
+        };
+
+        let logs = JSON.parse(localStorage.getItem("symptomLogs")) || [];
+        logs.push(log);
+        localStorage.setItem("symptomLogs", JSON.stringify(logs));
         updateSymptomHistory();
-        showSection('prediction');
+    }
+
+    function updateSymptomHistory() {
+        let logs = JSON.parse(localStorage.getItem("symptomLogs")) || [];
+        let historyList = document.getElementById("symptomHistory");
+        historyList.innerHTML = "";
+        logs.forEach(log => {
+            let li = document.createElement("li");
+            li.innerText = `${log.date} - Mood: ${log.mood}, Symptoms: ${log.symptoms}`;
+            historyList.appendChild(li);
+        });
+    }
+
+    function clearSymptomHistory() {
+        localStorage.removeItem("symptomLogs");
+        updateSymptomHistory();
+    }
+
+    updateCycleHistory();
+    updateSymptomHistory();
+    showSection('prediction');
+    function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "login.html";  // Redirect to login
+}
+
+</script>
+
     </script>
 </body>
 </html>
