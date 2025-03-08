@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Period Tracker - Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js Library -->
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #ffccd5, #ffb3c6);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        nav {
+            background: #d63384;
+            padding: 15px;
+        }
+        nav a {
+            color: white;
+            margin: 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        section {
+            padding: 20px;
+            display: none;
+            background: white;
+            border-radius: 10px;
+            margin: 20px auto;
+            width: 80%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        input, button, select {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 8px;
+            border: 1px solid #d63384;
+        }
+        button {
+            background: #d63384;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" onclick="showSection('prediction')">Period Prediction</a>
+        <a href="#" onclick="showSection('history')">Cycle History</a>
+        <a href="#" onclick="showSection('tips')">Health Tips</a>
+        <a href="#" onclick="showSection('symptomTracker')">Symptom Tracker</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </nav>
+    
+    <section id="prediction">
+        <h2>Period Prediction</h2>
+        <label>Last Period Date:</label>
+        <input type="date" id="lastPeriod"><br>
+        <label>Cycle Length:</label>
+        <input type="number" id="cycleLength" min="21" max="35"><br>
+        <button id="predictButton" onclick="predictPeriod()">Predict</button>
+        <p id="predictionResult"></p>
+    </section>
+    
+    <section id="history">
+        <h2>Cycle History</h2>
+        <ul id="historyList"></ul>
+        <button onclick="clearHistory()">Clear History</button>
+    </section>
+
+    <section id="tips">
+        <h2>Health Tips</h2>
+        <p>Stay hydrated and eat iron-rich foods during your cycle.</p>
+    </section>
+
+    <section id="symptomTracker">
+        <h2>Symptom & Mood Tracker</h2>
+        <label>How do you feel today?</label><br>
+        <select id="mood">
+            <option value="Happy">😊 Happy</option>
+            <option value="Sad">😢 Sad</option>
+            <option value="Tired">😴 Tired</option>
+            <option value="Energetic">⚡ Energetic</option>
+        </select><br>
+
+        <label>Symptoms:</label><br>
+        <input type="checkbox" id="cramps"> Cramps
+        <input type="checkbox" id="headache"> Headache
+        <input type="checkbox" id="fatigue"> Fatigue
+        <input type="checkbox" id="bloating"> Bloating <br><br>
+
+        <button onclick="logSymptoms()">Save Log</button>
+        <h3>History</h3>
+        <ul id="symptomHistory"></ul>
+        <button onclick="clearSymptomHistory()">Clear Symptom History</button>
+
+        <h3>Mood Trends</h3>
+        <canvas id="moodChart"></canvas>  <!-- Chart for visualization -->
+    </section>
+
+    <script>
+        if (!localStorage.getItem("loggedIn")) {
+            window.location.href = "login.html";
+        }
+
+        function showSection(section) {
+            document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
+            document.getElementById(section).style.display = "block";
+        }
+        
+        function logSymptoms() {
+            let mood = document.getElementById("mood").value;
+            let symptoms = [];
+            
+            ["cramps", "headache", "fatigue", "bloating"].forEach(symptom => {
+                if (document.getElementById(symptom).checked) {
+                    symptoms.push(symptom);
+                }
+            });
+
+            let log = {
+                date: new Date().toDateString(),
+                mood: mood,
+                symptoms: symptoms.join(", ") || "None"
+            };
+
+            let logs = JSON.parse(localStorage.getItem("symptomLogs")) || [];
+            logs.push(log);
+            localStorage.setItem("symptomLogs", JSON.stringify(logs));
+            updateSymptomHistory();
+        }
+
+        function updateSymptomHistory() {
+            let logs = JSON.parse(localStorage.getItem("symptomLogs")) || [];
+            let historyList = document.getElementById("symptomHistory");
+            historyList.innerHTML = "";
+            logs.forEach(log => {
+                let li = document.createElement("li");
+                li.innerText = `${log.date} - Mood: ${log.mood}, Symptoms: ${log.symptoms}`;
+                historyList.appendChild(li);
+            });
+        }
+
+        function clearSymptomHistory() {
+            localStorage.removeItem("symptomLogs");
+            updateSymptomHistory();
+        }
+
+        updateSymptomHistory();
+        showSection('prediction');
+    </script>
+</body>
+</html>
