@@ -10,6 +10,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
+
+def test_example():
+    assert 1 == 1
+
 # Setup WebDriver
 service = Service(ChromeDriverManager().install())
 options = Options()

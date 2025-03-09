@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -75,6 +74,19 @@
         .forgot-password:hover {
             text-decoration: underline;
         }
+        #runButton {
+            margin-top: 20px;
+            background-color: #d63384;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        #runButton:hover {
+            background-color: #c40068;
+        }
     </style>
 </head>
 <body>
@@ -85,9 +97,20 @@
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
         <button id="loginButton" onclick="login()">Login</button>
+        <button id="runButton" onclick="runTests()">Run Test</button>
+        <div id="testReport" style="display: none;">
+            <button id="downloadButton" onclick="downloadReport()">Download Report</button>
+            <pre id="reportContent"></pre>
+        </div>
+
         <p id="message"></p>
         <a href="#" class="forgot-password">Forgot Password?</a>
     </div>
+
+    <!-- Run Test button -->
+
+    <!-- Test report section -->
+    
 
     <script>
         function login() {
@@ -99,6 +122,48 @@
             } else {
                 document.getElementById("message").innerText = "❌ Invalid Credentials!";
             }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+    var runButton = document.getElementById("runButton");
+    if (runButton) {
+        runButton.addEventListener("click", runTests);
+    }
+});
+
+        // Function to call Flask API and run tests
+        // Function to call Flask API and run tests
+        function runTests() {
+    // Show an alert before making the request
+    alert("Running tests...");
+
+    // Send a GET request to your Flask endpoint
+    fetch('http://127.0.0.1:5000/run-tests')
+        .then(response => response.json())  // Parse JSON response
+        .then(data => {
+            if (data.report) {
+                // Show the test results in the pre element
+                document.getElementById("testReport").style.display = "block";
+                document.getElementById("reportContent").textContent = data.report;
+            } else {
+                alert("Error: " + (data.error || "Unknown error"));
+            }
+        })
+        .catch(error => {
+            // Handle any errors during the fetch
+            alert("Error running tests: " + error);
+        });
+}
+
+
+
+        // Function to download the test report
+        function downloadReport() {
+            let text = document.getElementById("reportContent").textContent;
+            let blob = new Blob([text], { type: "text/plain" });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "test_report.txt";
+            link.click();
         }
     </script>
 </body>
