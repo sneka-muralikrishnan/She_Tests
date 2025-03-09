@@ -43,6 +43,83 @@
             color: white;
             cursor: pointer;
         }
+        #tips {
+    background-color: #f9f9f9;
+    padding: 30px;
+    text-align: center;
+}
+
+.tips-heading {
+    font-family: 'Arial', sans-serif;
+    font-size: 2.2rem;
+    color: #d9534f;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tips-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tip-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: left;
+    transition: transform 0.3s ease;
+}
+
+.tip-card:hover {
+    transform: translateY(-10px);
+}
+
+.tip-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.tip-content {
+    padding: 20px;
+}
+
+.tip-title {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.tip-card p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #c9302c;
+}
+
+
     </style>
 </head>
 <body>
@@ -71,9 +148,68 @@
     </section>
 
     <section id="tips">
-        <h2>Health Tips</h2>
-        <p>Stay hydrated and eat iron-rich foods during your cycle.</p>
+        <h2 class="tips-heading">Health Tips</h2>
+        <div class="tips-container">
+            <div class="tip-card">
+                <img src="iron_rich_foods.jpg" alt="Iron-rich food" class="tip-image">
+                <div class="tip-content">
+                    <h3 class="tip-title">Eat Iron-Rich Foods</h3>
+                    <p>Boost your energy by eating iron-rich foods like spinach, beans, and lean meats during your cycle.</p>
+                    <button class="btn-primary" onclick="window.open('https://www.healthline.com/health/womens-health/what-to-eat-during-period', '_blank')">
+                        Learn More
+                    </button>
+                    
+                </div>
+            </div>
+            <div class="tip-card">
+                <img src="water.jpg" alt="Stay Hydrated" class="tip-image">
+                <div class="tip-content">
+                    <h3 class="tip-title">Stay Hydrated</h3>
+                    <p>Drink plenty of water to stay hydrated and support overall well-being during your cycle.</p>
+                    <button class="btn-primary" onclick="window.open('https://www.medicalnewstoday.com/articles/why-is-drinking-water-important', '_blank')">
+                        Stay Hydrated
+                    </button>                </div>
+            </div>
+            <div class="tip-card">
+                <img src="tea.jpg" alt="Herbal Teas" class="tip-image">
+                <div class="tip-content">
+                    <h3 class="tip-title">Herbal Teas for Relief</h3>
+                    <p>Consider drinking herbal teas like chamomile to ease cramps and bloating during your period.</p>
+                    <button class="btn-primary" onclick="window.open('https://www.healthline.com/nutrition/best-teas-for-menstrual-cramps', '_blank')">
+                        Herbal Teas
+                    </button>                </div>
+            </div>
+            <div class="tip-card">
+                <img src="exercise.jpg" alt="Exercise" class="tip-image">
+                <div class="tip-content">
+                    <h3 class="tip-title">Exercise Regularly</h3>
+                    <p>Regular exercise, such as walking or yoga, can help alleviate period cramps and improve mood.</p>
+                    <button class="btn-primary" onclick="window.open('https://www.medicalnewstoday.com/articles/exercise-during-period', '_blank')">
+                        Exercise During Period
+                    </button>
+                </div>
+            </div>
+            <div class="tip-card">
+                <img src="diet.jpg" alt="Balanced Diet" class="tip-image">
+                <div class="tip-content">
+                    <h3 class="tip-title">Maintain a Balanced Diet</h3>
+                    <p>Eat a well-balanced diet with fruits, vegetables, proteins, and whole grains to maintain overall health.</p>
+                    <button class="btn-primary" onclick="window.open('https://www.hsph.harvard.edu/nutritionsource/healthy-eating-plate/', '_blank')">
+                        Balanced Diet
+                    </button>                </div>
+            </div>
+            <div class="tip-card">
+                <img src="sleep.jpg" alt="Sleep Well" class="tip-image">
+                <div class="tip-content">
+                    <h3 class="tip-title">Get Enough Sleep</h3>
+                    <p>Adequate sleep helps your body recover and manage hormonal changes during your cycle. Aim for 7-9 hours.</p>
+                    <button class="btn-primary" onclick="window.open('https://www.sleepfoundation.org/women-sleep/periods-and-sleep', '_blank')">
+                        Sleep Well
+                    </button>                </div>
+            </div>
+        </div>
     </section>
+    
 
     <section id="symptomTracker">
         <h2>Symptom & Mood Tracker</h2>
